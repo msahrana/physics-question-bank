@@ -1,0 +1,47 @@
+
+model User {
+  id                 String     @id @default(uuid())
+  name               String
+  email              String     @unique
+
+  emailVerified      Boolean    @default(false)
+
+  role               UserRole   @default(STUDENT)
+  status             UserStatus @default(ACTIVE)
+
+  needPasswordChange Boolean    @default(false)
+
+  imageUrl           String     @default("")
+  imagePublicId      String     @default("")
+
+  deletedAt          DateTime?
+
+  // Authentication
+  accounts           Account[]
+
+  // User Profiles
+  student            Student?
+  teacher            Teacher?
+
+  // Content Creator Relations
+  createdCourses     Course[]        @relation("CourseCreator")
+  createdChapters    Chapter[]       @relation("ChapterCreator")
+  createdStimuli     Stimulus[]      @relation("StimulusCreator")
+  createdMCQs        MCQQuestion[]   @relation("MCQCreator")
+  createdCQs         CQQuestion[]    @relation("CQCreator")
+  createdShorts      ShortQuestion[] @relation("ShortQuestionCreator")
+
+  uploadedMedia      MediaAsset[]
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  authTokens AuthToken[]
+
+  payment   Payment[]
+
+  @@index([role, status])
+  @@index([deletedAt])
+
+  @@map("users")
+}

@@ -1,0 +1,39 @@
+model CQQuestion {
+  id          String         @id @default(uuid())
+  questionNo  Int
+  question    Json
+
+  questionText String?
+  difficulty   Difficulty     @default(MEDIUM)
+  status       QuestionStatus @default(DRAFT)
+  isPremium    Boolean        @default(false)
+
+  source      String?
+  sourceYear  Int?
+  sortOrder   Int            @default(0)
+  publishedAt DateTime?
+  photoUrl    String?
+
+  chapterId String
+  chapter   Chapter @relation(  fields: [chapterId],  references: [id],  onDelete: Cascade)
+
+  stimulusId String?
+  stimulus   Stimulus? @relation(  fields: [stimulusId],  references: [id],  onDelete: Cascade)
+
+  parts CQPart[]
+
+  createdById String?
+  createdBy   User? @relation(  "CQCreator",  fields: [createdById],  references: [id],  onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([chapterId, questionNo])
+  @@index([chapterId, status, sortOrder])
+  @@index([chapterId, difficulty])
+  @@index([stimulusId])
+  @@index([createdById])
+  @@index([status, publishedAt])
+  
+  @@map("cq_questions")
+}

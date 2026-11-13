@@ -1,0 +1,18 @@
+model Topic {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String
+  description String?
+  sortOrder   Int     @default(0)
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([chapterId, slug])
+  @@index([chapterId, sortOrder])
+
+   @@map("topics")
+}

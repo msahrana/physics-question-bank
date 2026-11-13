@@ -1,0 +1,18 @@
+model MediaAsset {
+  id           String @id @default(uuid())
+  fileName     String
+  originalName String
+  url          String
+  mimeType     String
+  size         Int
+  altText      String?
+
+  uploadedById String?
+  uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime @default(now())
+
+  @@index([uploadedById])
+
+   @@map("media_assets")
+}

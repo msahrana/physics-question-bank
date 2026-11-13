@@ -1,0 +1,23 @@
+model Plan {
+  id           String  @id @default(uuid())
+  name         String
+  slug         String  @unique
+  description  String?
+
+  price        Decimal @db.Decimal(10, 2)
+  currency     String  @default("BDT")
+  duration     Int     // Duration in days
+
+  isActive     Boolean @default(true)
+  isFeatured   Boolean @default(false)
+  displayOrder Int     @default(0)
+
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, displayOrder])
+  
+  @@map("plans")
+}

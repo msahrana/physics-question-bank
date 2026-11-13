@@ -1,0 +1,49 @@
+
+model MCQQuestion {
+  id              String         @id @default(uuid())
+
+  // Question Content
+  question        Json
+  questionText    String?
+
+  explanation     Json?
+  explanationText String?
+
+  // Question Settings
+  difficulty      Difficulty     @default(MEDIUM)
+  status          QuestionStatus @default(DRAFT)
+  isPremium       Boolean        @default(false)
+
+  source          String?
+  sourceYear      Int?
+  sortOrder       Int            @default(0)
+
+  publishedAt     DateTime?
+
+  // Chapter Relation
+  chapterId       String
+  chapter         Chapter @relation(  fields: [chapterId],  references: [id],  onDelete: Cascade)
+
+  // Stimulus Relation
+  stimulusId      String?
+  stimulus        Stimulus? @relation(  fields: [stimulusId],  references: [id],  onDelete: Cascade)
+
+  // Options
+  options         MCQOption[]
+
+  // Creator Relation
+  createdById     String?
+  createdBy       User? @relation(  "MCQCreator",  fields: [createdById],  references: [id],  onDelete: SetNull)
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([chapterId, status, sortOrder])
+  @@index([chapterId, difficulty])
+  @@index([stimulusId])
+  @@index([createdById])
+  @@index([status, publishedAt])
+
+  @@map("mcq_questions")
+}

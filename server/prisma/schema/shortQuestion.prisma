@@ -1,0 +1,48 @@
+
+model ShortQuestion {
+  id              String         @id @default(uuid())
+
+  // Question Content
+  question        Json
+  questionText    String?
+
+  // Answer Content
+  answer          Json?
+  answerText      String?
+
+  // Explanation
+  explanation     Json?
+  explanationText String?
+
+  // Question Settings
+  difficulty      Difficulty     @default(MEDIUM)
+  status          QuestionStatus @default(DRAFT)
+  isPremium       Boolean        @default(false)
+
+  source          String?
+  sourceYear      Int?
+  sortOrder       Int            @default(0)
+
+  publishedAt     DateTime?
+
+  photoUrl        String?
+
+  // Chapter Relation
+  chapterId       String
+  chapter         Chapter @relation(  fields: [chapterId],  references: [id],  onDelete: Cascade)
+
+  // Creator Relation
+  createdById     String?
+  createdBy       User? @relation(  "ShortQuestionCreator",  fields: [createdById],  references: [id],  onDelete: SetNull)
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([chapterId, status, sortOrder])
+  @@index([chapterId, difficulty])
+  @@index([createdById])
+  @@index([status, publishedAt])
+
+  @@map("short_questions")
+}

@@ -1,0 +1,27 @@
+
+model CQPart {
+  id           String      @id @default(uuid())
+
+  label        String
+  question     Json
+  questionText String?
+
+  answer       Json?
+  
+  type         CQPartType
+
+  answerText   String?
+  
+  sortOrder    Int         @default(0)
+
+  cqQuestionId String
+  cqQuestion   CQQuestion @relation(  fields: [cqQuestionId],  references: [id],  onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([cqQuestionId, type])
+  @@index([cqQuestionId, sortOrder])
+
+  @@map("cq_parts")
+}

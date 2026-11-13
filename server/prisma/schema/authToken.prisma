@@ -1,0 +1,19 @@
+
+model AuthToken {
+  id        String        @id @default(uuid())
+  userId    String
+  tokenHash String        @unique
+  type      AuthTokenType
+
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user      User @relation( fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, type])
+  @@index([expiresAt])
+
+  @@map("auth_tokens")
+}

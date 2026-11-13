@@ -1,0 +1,120 @@
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DEACTIVATED
+  DELETED
+}
+
+enum AccessType {
+  FREE
+  PREMIUM
+}
+
+enum AuthProvider {
+  GOOGLE
+  CREDENTIAL
+}
+
+enum QuestionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum CQPartType {
+  GA
+  GHA
+  UMA
+  CHA
+  CHHA
+  JA
+  JHA
+  NYA
+  TA
+  THA
+  DA
+  DHA
+  NA
+  TA_MURDHANYA
+  THA_MURDHANYA
+  DA_MURDHANYA
+  DHA_MURDHANYA
+  NA_MURDHANYA
+  PA
+  PHA
+  BA
+  BHA
+  MA
+  YA
+  RA
+  LA
+  SHA
+  SSA
+  SA
+  HA
+}
+
+enum MCQPartType {
+  KA
+  KHA
+  GA
+  GHA
+}
+
+enum AuthTokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+enum TeacherVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentMethod {
+  STRIPE
+  SSLCOMMERZ
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum EducationBoard {
+  DHAKA
+  RAJSHAHI
+  CUMILLA
+  JASHORE
+  CHITTAGONG
+  BARISHAL
+  SYLHET
+  DINajPUR
+  MYMENSINGH
+  MADRASAH
+  TECHNICAL
+  OTHER
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}

@@ -1,0 +1,14 @@
+model MCQOption {
+  id         String  @id @default(uuid())
+  text       Json
+  textPlain  String?
+  isCorrect  Boolean @default(false)
+  sortOrder  Int     @default(0)
+
+  questionId String
+  question   MCQQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, sortOrder])
+
+   @@map("mcq_options")
+}

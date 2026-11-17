@@ -1,0 +1,1 @@
+export type CourseAccessType = 'FREE' | 'PAID';

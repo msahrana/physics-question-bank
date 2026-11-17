@@ -89,7 +89,7 @@ export const auth = (...requiredRoles: UserRole[]) => {
                 );
             }
 
-            if (user.isDeleted || user.status === 'DELETED') {
+            if (user.deletedAt || user.status === 'DELETED') {
                 throw new AppError(
                     httpStatus.GONE,
                     'User account has been deleted.',

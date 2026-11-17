@@ -115,6 +115,7 @@ const createBulkMCQQuestionIntoDB = async (payload: IBulkCreateMCQQuestion) => {
 };
 
 // Get All MCQ Questions
+
 const getAllMCQQuestionsFromDB = async (filters: any) => {
     const {
         searchTerm,
@@ -129,6 +130,7 @@ const getAllMCQQuestionsFromDB = async (filters: any) => {
 
     const andConditions: Prisma.MCQQuestionWhereInput[] = [];
 
+    // Search
     if (searchTerm) {
         andConditions.push({
             OR: [
@@ -148,6 +150,7 @@ const getAllMCQQuestionsFromDB = async (filters: any) => {
         });
     }
 
+    // Filters
     if (chapterId) {
         andConditions.push({ chapterId });
     }
@@ -165,32 +168,46 @@ const getAllMCQQuestionsFromDB = async (filters: any) => {
     }
 
     if (isPremium !== undefined) {
-        andConditions.push({ isPremium });
+        andConditions.push({
+            isPremium:
+                typeof isPremium === 'string'
+                    ? isPremium === 'true'
+                    : isPremium,
+        });
     }
 
     const where: Prisma.MCQQuestionWhereInput =
         andConditions.length > 0 ? { AND: andConditions } : {};
 
-    const skip = (Number(page) - 1) * Number(limit);
+    // Pagination
+    const currentPage = Math.max(1, Number(page) || 1);
+    const pageSize = Math.max(1, Number(limit) || 10);
 
-    const [data, total] = await prisma.$transaction([
+    const skip = (currentPage - 1) * pageSize;
+
+    // Fetch data and total count
+    const [data, total] = await Promise.all([
         prisma.mCQQuestion.findMany({
             where,
             skip,
-            take: Number(limit),
+            take: pageSize,
             include: mcqInclude,
             orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         }),
-        prisma.mCQQuestion.count({ where }),
+
+        prisma.mCQQuestion.count({
+            where,
+        }),
     ]);
 
+    // Meta
     return {
         data,
         meta: {
-            page: Number(page),
-            limit: Number(limit),
+            page: currentPage,
+            limit: pageSize,
             total,
-            totalPages: Math.ceil(total / Number(limit)),
+            totalPages: Math.ceil(total / pageSize),
         },
     };
 };

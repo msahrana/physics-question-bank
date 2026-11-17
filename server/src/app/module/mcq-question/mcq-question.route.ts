@@ -1,11 +1,8 @@
-
 import { Router } from 'express';
 
 import { MCQQuestionControllers } from './mcq-question.controller';
 import { MCQQuestionValidation } from './mcq-question.validation';
 import { validateRequest } from '../../middleware/validateRequest';
-
-
 
 const router = Router();
 
@@ -15,9 +12,7 @@ const router = Router();
 
 router.post(
     '/bulk',
-    validateRequest(
-        MCQQuestionValidation.bulkCreateMCQQuestionSchema,
-    ),
+    validateRequest(MCQQuestionValidation.bulkCreateMCQQuestionSchema),
     MCQQuestionControllers.createBulkMCQQuestion,
 );
 
@@ -27,9 +22,7 @@ router.post(
 
 router.post(
     '/',
-    validateRequest(
-        MCQQuestionValidation.createMCQQuestionSchema,
-    ),
+    validateRequest(MCQQuestionValidation.createMCQQuestionSchema),
     MCQQuestionControllers.createMCQQuestion,
 );
 
@@ -37,25 +30,13 @@ router.post(
 // 3. Get All MCQ
 // ========================================
 
-router.get(
-    '/',
-    validateRequest(
-        MCQQuestionValidation.getAllMCQQuestionsSchema,
-    ),
-    MCQQuestionControllers.getAllMCQQuestions,
-);
+router.get('/', MCQQuestionControllers.getAllMCQQuestions);
 
 // ========================================
 // 4. Get Single MCQ
 // ========================================
 
-router.get(
-    '/:id',
-    validateRequest(
-        MCQQuestionValidation.mcqQuestionIdSchema,
-    ),
-    MCQQuestionControllers.getSingleMCQQuestion,
-);
+router.get('/:id', MCQQuestionControllers.getSingleMCQQuestion);
 
 // ========================================
 // 5. Update MCQ
@@ -63,9 +44,7 @@ router.get(
 
 router.patch(
     '/:id',
-    validateRequest(
-        MCQQuestionValidation.updateMCQQuestionSchema,
-    ),
+    validateRequest(MCQQuestionValidation.updateMCQQuestionSchema),
     MCQQuestionControllers.updateMCQQuestion,
 );
 
@@ -73,12 +52,6 @@ router.patch(
 // 6. Delete MCQ
 // ========================================
 
-router.delete(
-    '/:id',
-    validateRequest(
-        MCQQuestionValidation.mcqQuestionIdSchema,
-    ),
-    MCQQuestionControllers.deleteMCQQuestion,
-);
+router.delete('/:id', MCQQuestionControllers.deleteMCQQuestion);
 
 export const MCQQuestionRoutes = router;

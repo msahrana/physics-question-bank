@@ -56,3 +56,24 @@ export interface IVerifyEmail {
     email: string;
     otp: string;
 }
+
+export interface IRequestUser {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+}
+
+export interface IGoogleLoginPayload {
+    idToken: string;
+}
+
+export interface IForgotPasswordPayload {
+    email: string;
+}
+
+export interface IResetPasswordPayload {
+    email: string;
+    otp: string;
+    newPassword: string;
+}

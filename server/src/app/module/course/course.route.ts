@@ -14,11 +14,7 @@ router.post(
 );
 
 // Get All Courses
-router.get(
-    '/',
-    validateRequest(CourseValidations.courseQueryValidation),
-    CourseControllers.getAllCourses,
-);
+router.get('/', CourseControllers.getAllCourses);
 
 // Get Single Course
 router.get('/:id', CourseControllers.getSingleCourse);

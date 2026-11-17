@@ -1,35 +1,47 @@
 import { Router } from 'express';
+
 import { validateRequest } from '../../middleware/validateRequest';
 import { ShortQuestionValidation } from './short-question.validation';
 import { ShortQuestionControllers } from './short-question.controller';
 
 const router = Router();
 
-// Create
+// ========================================
+// 1. Create Short Question
+// ========================================
+
 router.post(
     '/',
     validateRequest(ShortQuestionValidation.createShortQuestionSchema),
     ShortQuestionControllers.createShortQuestion,
 );
 
-// Get all
-router.get(
-    '/',
-    validateRequest(ShortQuestionValidation.getAllShortQuestionsSchema),
-    ShortQuestionControllers.getAllShortQuestions,
-);
+// ========================================
+// 2. Get All Short Questions
+// ========================================
 
-// Get single
+router.get('/', ShortQuestionControllers.getAllShortQuestions);
+
+// ========================================
+// 3. Get Single Short Question
+// ========================================
+
 router.get('/:id', ShortQuestionControllers.getSingleShortQuestion);
 
-// Update
+// ========================================
+// 4. Update Short Question
+// ========================================
+
 router.patch(
     '/:id',
     validateRequest(ShortQuestionValidation.updateShortQuestionSchema),
     ShortQuestionControllers.updateShortQuestion,
 );
 
-// Delete
+// ========================================
+// 5. Delete Short Question
+// ========================================
+
 router.delete('/:id', ShortQuestionControllers.deleteShortQuestion);
 
 export const ShortQuestionRoutes = router;

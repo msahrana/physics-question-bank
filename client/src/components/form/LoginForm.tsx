@@ -18,6 +18,8 @@ import {
     FieldSeparator,
 } from '../ui/field';
 
+import z from 'zod';
+
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 import { toast } from '../ui/toast';
@@ -29,23 +31,30 @@ export default function LoginForm() {
 
     const router = useRouter();
 
+    type UserDefaultValues = z.infer<typeof loginSchema>;
+
+    // const defaultValues: UserDefaultValues = {
+    //     email: 'msahossainrana@gmail.com', //SUPER_ADMIN or ADMIN
+    //     password: '$2b$12$SayeD[rAna]@5288',
+    // };
+
+    // const defaultValues: UserDefaultValues = {
+    //     email: 'shohidulislam.teacher@gmail.com', //TEACHER
+    //     password: '$2b$12$ISlamShohidUL2544',
+    // };
+
+    const defaultValues: UserDefaultValues = {
+        email: 'rahim@gmail.com', //STUDENT
+        password: 'Rahim@12345',
+    };
+
+    // const defaultValues: UserDefaultValues = {
+    //     email: 'mosttaramony@gmail.com', //STUDENT
+    //     password: '$2b$12$SAyed2244',
+    // };
+
     const form = useForm({
-        // defaultValues: {
-        //     email: 'tara.mony@srhealthcare.com', //admin
-        //     password: '$2b$12$TaraMonymost7860',
-        // },
-        // defaultValues: {
-        //     email: 'testerdoctor@gmail.com', //doctor
-        //     password: 'Tester@doctor12345',
-        // },
-        // defaultValues: {
-        //     email: 'drsiyana3@gmail.com', //doctor
-        //     password: '5*MCj*Fgj5',
-        // },
-        defaultValues: {
-            email: 'msahossainrana@gmail.com', //patient
-            password: '$2b$12$SAyed2244',
-        },
+        defaultValues,
 
         validators: {
             onSubmit: loginSchema,

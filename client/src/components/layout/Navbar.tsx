@@ -19,12 +19,15 @@ import {
     CheckCircle,
 } from 'lucide-react';
 
+import { UserRole } from '@/types';
+
 interface NavbarProps {
     isLoggedIn?: boolean;
     user?: {
         name: string;
         image?: string | null;
-    };
+        role?: UserRole;
+    } | null;
     onLogout?: () => void | Promise<void>;
 }
 
@@ -75,20 +78,23 @@ const courseLinks = [
 
 const profileLinks = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutDashboard,
-    },
-    {
         title: 'Settings',
         href: '/settings',
         icon: Settings,
     },
 ];
 
+// Update these routes according to your actual app routes.
+const dashboardRoute: Partial<Record<UserRole, string>> = {
+    SUPER_ADMIN: '/admin',
+    ADMIN: '/admin',
+    TEACHER: '/teacher',
+    STUDENT: '/student',
+};
+
 export default function Navbar({
     isLoggedIn = false,
-    user,
+    user = null,
     onLogout,
 }: NavbarProps) {
     const pathname = usePathname();
@@ -98,13 +104,18 @@ export default function Navbar({
     const [profileOpen, setProfileOpen] = useState(false);
     const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
 
-    // Separate refs for desktop and mobile elements
     const desktopCourseRef = useRef<HTMLDivElement>(null);
     const desktopProfileRef = useRef<HTMLDivElement>(null);
     const mobileProfileRef = useRef<HTMLDivElement>(null);
 
-    // Track the previous route to close menus only after navigation
     const previousPathname = useRef(pathname);
+
+    // Authenticated user's role
+    const role = user?.role;
+
+    const dashboardHref = role
+        ? dashboardRoute[role] || '/student'
+        : '/student';
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -116,11 +127,10 @@ export default function Navbar({
                 setExpandedCourse(null);
             }
 
-            if (!desktopProfileRef.current?.contains(target)) {
-                setProfileOpen(false);
-            }
-
-            if (!mobileProfileRef.current?.contains(target)) {
+            if (
+                !desktopProfileRef.current?.contains(target) &&
+                !mobileProfileRef.current?.contains(target)
+            ) {
                 setProfileOpen(false);
             }
         }
@@ -132,7 +142,7 @@ export default function Navbar({
         };
     }, []);
 
-    // Close menus when the route changes
+    // Close menus when route changes
     useEffect(() => {
         if (previousPathname.current !== pathname) {
             previousPathname.current = pathname;
@@ -179,6 +189,76 @@ export default function Navbar({
         setExpandedCourse((current) => (current === href ? null : href));
     };
 
+    // Reusable avatar
+    const Avatar = ({ size = 40 }: { size?: number }) => {
+        if (user?.image) {
+            return (
+                <Image
+                    src={user.image}
+                    alt={user.name || 'User profile'}
+                    width={size}
+                    height={size}
+                    unoptimized
+                    className="rounded-full object-cover"
+                    style={{
+                        width: size,
+                        height: size,
+                    }}
+                />
+            );
+        }
+
+        return (
+            <div
+                className="flex items-center justify-center rounded-full bg-blue-100 text-blue-700"
+                style={{
+                    width: size,
+                    height: size,
+                }}
+            >
+                <User size={size * 0.5} />
+            </div>
+        );
+    };
+
+    // Reusable profile navigation links
+    const ProfileNavigation = () => (
+        <>
+            <Link
+                href={dashboardHref}
+                onClick={closeMenus}
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
+                    isActive(dashboardHref)
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'text-gray-700 hover:bg-gray-50'
+                }`}
+            >
+                <LayoutDashboard size={19} />
+                Dashboard
+            </Link>
+
+            {profileLinks.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMenus}
+                        className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
+                            isActive(item.href)
+                                ? 'bg-blue-50 text-blue-700'
+                                : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                        <Icon size={19} />
+                        {item.title}
+                    </Link>
+                );
+            })}
+        </>
+    );
+
     return (
         <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-md">
             <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -206,7 +286,7 @@ export default function Navbar({
 
                 {/* Desktop Navigation */}
                 <div className="hidden items-center gap-8 md:flex">
-                    {/* Home & About */}
+                    {/* Home, About and Apply */}
                     {navLinks.map((link) => (
                         <Link
                             key={link.href}
@@ -254,7 +334,6 @@ export default function Navbar({
                                         key={course.href}
                                         className="rounded-lg"
                                     >
-                                        {/* Course Name */}
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -298,7 +377,7 @@ export default function Navbar({
 
                                         {/* Question Categories */}
                                         {expandedCourse === course.href && (
-                                            <div className="ml-8 mb-2 flex flex-col gap-1 border-l-2 border-blue-100 pl-4">
+                                            <div className="mb-2 ml-8 flex flex-col gap-1 border-l-2 border-blue-100 pl-4">
                                                 {questionTypes.map((type) => {
                                                     const Icon = type.icon;
                                                     const href = `${course.href}/${type.slug}`;
@@ -339,7 +418,10 @@ export default function Navbar({
                     </div>
 
                     {/* Contact */}
-                    <Link href="/contact-us" className={navClass('/contact-us')}>
+                    <Link
+                        href="/contact-us"
+                        className={navClass('/contact-us')}
+                    >
                         Contact Us
                     </Link>
 
@@ -363,21 +445,9 @@ export default function Navbar({
                                 }}
                                 aria-expanded={profileOpen}
                                 aria-label="Open profile menu"
-                                className="flex items-center gap-2 rounded-full border border-gray-200 p-1 transition hover:bg-gray-50"
+                                className="flex items-center gap-2 rounded-full transition hover:bg-gray-50"
                             >
-                                {user?.image ? (
-                                    <Image
-                                        src={user.image}
-                                        alt={user.name}
-                                        width={40}
-                                        height={40}
-                                        className="h-10 w-10 rounded-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700">
-                                        <User size={21} />
-                                    </div>
-                                )}
+                                <Avatar />
 
                                 <ChevronDown
                                     size={16}
@@ -389,35 +459,24 @@ export default function Navbar({
 
                             {profileOpen && (
                                 <div className="absolute right-0 top-14 w-64 overflow-hidden rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                                    {/* User Information */}
                                     <div className="border-b border-gray-100 px-3 py-4">
-                                        <p className="truncate font-bold text-gray-900">
-                                            {user?.name || 'Student'}
-                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar size={42} />
 
-                                        <p className="mt-1 text-xs text-gray-400">
-                                            Physics Academy Student
-                                        </p>
+                                            <div className="min-w-0">
+                                                <p className="truncate font-bold text-gray-900">
+                                                    {user?.name || 'Student'}
+                                                </p>
+
+                                                <p className="mt-1 text-xs text-gray-400">
+                                                    {role || 'Student'}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    {profileLinks.map((item) => {
-                                        const Icon = item.icon;
-
-                                        return (
-                                            <Link
-                                                key={item.href}
-                                                href={item.href}
-                                                onClick={closeMenus}
-                                                className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
-                                                    isActive(item.href)
-                                                        ? 'bg-blue-50 text-blue-700'
-                                                        : 'text-gray-700 hover:bg-gray-50'
-                                                }`}
-                                            >
-                                                <Icon size={19} />
-                                                {item.title}
-                                            </Link>
-                                        );
-                                    })}
+                                    <ProfileNavigation />
 
                                     <div className="my-1 border-t border-gray-100" />
 
@@ -451,7 +510,7 @@ export default function Navbar({
             {mobileOpen && (
                 <div className="border-t border-gray-100 bg-white px-5 py-5 shadow-lg md:hidden">
                     <div className="flex flex-col gap-1">
-                        {/* Home & About */}
+                        {/* Home, About and Apply */}
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
@@ -495,7 +554,6 @@ export default function Navbar({
                             <div className="ml-3 flex flex-col gap-1 border-l-2 border-blue-100 pl-3">
                                 {courseLinks.map((course) => (
                                     <div key={course.href}>
-                                        {/* Mobile Course Name */}
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -555,15 +613,15 @@ export default function Navbar({
 
                         {/* Contact */}
                         <Link
-                            href="/contact"
+                            href="/contact-us"
                             onClick={closeMenus}
                             className={`rounded-lg px-3 py-3 text-sm font-semibold ${
-                                isActive('/contact')
+                                isActive('/contact-us')
                                     ? 'bg-blue-50 text-blue-600'
                                     : 'text-gray-700 hover:bg-gray-50'
                             }`}
                         >
-                            Contact
+                            Contact Us
                         </Link>
 
                         {/* Mobile Authentication */}
@@ -589,23 +647,17 @@ export default function Navbar({
                                     className="flex w-full items-center justify-between rounded-lg p-2 hover:bg-gray-50"
                                 >
                                     <div className="flex items-center gap-3">
-                                        {user?.image ? (
-                                            <Image
-                                                src={user.image}
-                                                alt={user.name}
-                                                width={44}
-                                                height={44}
-                                                className="h-11 w-11 rounded-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 text-blue-700">
-                                                <User size={22} />
-                                            </div>
-                                        )}
+                                        <Avatar size={44} />
 
-                                        <span className="text-sm font-semibold text-gray-900">
-                                            {user?.name || 'Student'}
-                                        </span>
+                                        <div className="text-left">
+                                            <span className="block text-sm font-semibold text-gray-700">
+                                                {user?.name || 'Student'}
+                                            </span>
+
+                                            <span className="text-xs text-gray-400">
+                                                {role || 'Student'}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <ChevronDown
@@ -618,21 +670,9 @@ export default function Navbar({
 
                                 {profileOpen && (
                                     <div className="mt-2 flex flex-col gap-1 pl-3">
-                                        {profileLinks.map((item) => {
-                                            const Icon = item.icon;
+                                        <ProfileNavigation />
 
-                                            return (
-                                                <Link
-                                                    key={item.href}
-                                                    href={item.href}
-                                                    onClick={closeMenus}
-                                                    className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-gray-700 hover:bg-blue-50"
-                                                >
-                                                    <Icon size={18} />
-                                                    {item.title}
-                                                </Link>
-                                            );
-                                        })}
+                                        <div className="my-1 border-t border-gray-100" />
 
                                         <button
                                             type="button"

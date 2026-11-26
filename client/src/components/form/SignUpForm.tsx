@@ -29,12 +29,12 @@ export default function SignupForm() {
     const router = useRouter();
     const { mutate: register, isPending: registrationPending } = useRegister();
 
-    type PatientDefaultValues = z.infer<typeof registerSchema>;
+    type StudentDefaultValues = z.infer<typeof registerSchema>;
 
-    const defaultValues: PatientDefaultValues = {
+    const defaultValues: StudentDefaultValues = {
         name: 'Tara Mony',
         email: 'mosttaramony@gmail.com',
-        // contactNumber: '01796837860',
+        contactNumber: '01796837860',
         password: '',
         confirmPassword: '',
     };

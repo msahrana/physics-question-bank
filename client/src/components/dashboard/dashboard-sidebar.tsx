@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -20,8 +21,6 @@ import { SidebarItems } from '@/interface';
 import { adminRoutes, studentRoutes, teacherRoutes } from '@/routes';
 import { UserRole } from '@/types';
 
-// import Logo from '../logo/logo';
-
 const sidebarRoutes: Partial<Record<UserRole, SidebarItems>> = {
     SUPER_ADMIN: adminRoutes,
     ADMIN: adminRoutes,
@@ -36,19 +35,35 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
 
     return (
         <Sidebar>
-            <SidebarHeader>{/* <Logo /> */}</SidebarHeader>
+            <SidebarHeader>
+                <Link href="/" className="flex items-center gap-2 px-2 pt-20">
+                    <Image
+                        src="/logo-icon.png"
+                        alt="Physics Academy"
+                        width={40}
+                        height={40}
+                        priority
+                        className="object-contain"
+                    />
+
+                    <span className="font-semibold">Physics Academy</span>
+                </Link>
+            </SidebarHeader>
 
             <SidebarContent>
                 {routes.map((group) => (
                     <SidebarGroup key={group.title}>
-                        <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+                        <SidebarGroupLabel className="font-bold uppercase text-black">
+                            {group.title}
+                        </SidebarGroupLabel>
 
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 {group.items.map((item) => {
                                     const isActive =
                                         pathname === item.url ||
-                                        (item.url !== '/admin' &&
+                                        (item.url !== '/student' &&
+                                            item.url !== '/admin' &&
                                             pathname.startsWith(
                                                 `${item.url}/`,
                                             ));
@@ -60,6 +75,11 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
                                                     <Link href={item.url} />
                                                 }
                                                 isActive={isActive}
+                                                className={
+                                                    isActive
+                                                        ? 'text-blue-600 font-bold'
+                                                        : 'text-muted-foreground'
+                                                }
                                             >
                                                 {item.title}
                                             </SidebarMenuButton>

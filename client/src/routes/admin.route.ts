@@ -2,53 +2,50 @@ const prefix = '/admin';
 
 export const adminRoutes = [
     {
-        title: 'Management',
+        title: 'Dashboard',
         items: [
             {
                 title: 'Overview',
-                url: `${prefix}`,
-            },
-            {
-                title: 'Doctor Approval',
-                url: `${prefix}/approve-doctor`,
-            },
-            {
-                title: 'Doctors',
-                url: `${prefix}/doctors`,
-            },
-            {
-                title: 'Patients',
-                url: `${prefix}/patients`,
+                url: prefix,
             },
         ],
     },
     {
-        title: 'Appointments',
+        title: 'Course Management',
         items: [
             {
-                title: 'Appointments',
-                url: `${prefix}/appointments`,
+                title: 'All Courses',
+                url: `${prefix}/courses`,
             },
             {
-                title: 'Prescriptions',
-                url: `${prefix}/prescriptions`,
-            },
-            {
-                title: 'Medical Records',
-                url: `${prefix}/medical-records`,
+                title: 'All Chapters',
+                url: `${prefix}/chapters`,
             },
         ],
     },
     {
-        title: 'Finance & Reports',
+        title: 'Question Management',
         items: [
             {
-                title: 'Payments',
-                url: `${prefix}/payments`,
+                title: 'All MCQ Questions',
+                url: `${prefix}/mcq-questions`,
             },
             {
-                title: 'Analytics',
-                url: `${prefix}/analytics`,
+                title: 'All CQ Questions',
+                url: `${prefix}/cq-questions`,
+            },
+            {
+                title: 'All Short Questions',
+                url: `${prefix}/short-questions`,
+            },
+        ],
+    },
+    {
+        title: 'User Management',
+        items: [
+            {
+                title: 'Users',
+                url: `${prefix}/users`,
             },
         ],
     },

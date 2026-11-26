@@ -2,15 +2,45 @@ const prefix = '/student';
 
 export const studentRoutes = [
     {
-        title: 'Bookings',
+        title: 'Learning',
         items: [
             {
                 title: 'Overview',
-                url: `${prefix}`,
+                url: prefix,
             },
             {
-                title: 'My Appointments',
-                url: `${prefix}/my-appointments`,
+                title: 'My Courses',
+                url: `${prefix}/my-courses`,
+            },
+            {
+                title: 'My Exams',
+                url: `${prefix}/my-exams`,
+            },
+            {
+                title: 'Question Practice',
+                url: `${prefix}/question-practice`,
+            },
+            {
+                title: 'Bookmarks',
+                url: `${prefix}/bookmarks`,
+            },
+        ],
+    },
+
+    {
+        title: 'Academic',
+        items: [
+            {
+                title: 'Results',
+                url: `${prefix}/results`,
+            },
+            {
+                title: 'Progress',
+                url: `${prefix}/progress`,
+            },
+            {
+                title: 'Study History',
+                url: `${prefix}/study-history`,
             },
         ],
     },
@@ -21,10 +51,6 @@ export const studentRoutes = [
             {
                 title: 'Profile',
                 url: `${prefix}/profile`,
-            },
-            {
-                title: 'Settings',
-                url: `${prefix}/settings`,
             },
         ],
     },

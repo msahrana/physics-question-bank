@@ -6,42 +6,67 @@ export const teacherRoutes = [
         items: [
             {
                 title: 'Dashboard',
-                url: `${prefix}`,
-            },
-            {
-                title: 'Appointments',
-                url: `${prefix}/appointments`,
-            },
-            {
-                title: 'My Schedule',
-                url: `${prefix}/schedules`,
-            },
-        ],
-    },
-
-    {
-        title: 'Patients',
-        items: [
-            {
-                title: 'My Patients',
-                url: `${prefix}/patients`,
-            },
-            {
-                title: 'Medical Records',
-                url: `${prefix}/medical-records`,
+                url: prefix,
             },
         ],
     },
     {
-        title: 'Clinical',
+        title: 'Academic',
         items: [
             {
-                title: 'Prescriptions',
-                url: `${prefix}/prescriptions`,
+                title: 'My Courses',
+                url: `${prefix}/courses`,
             },
             {
-                title: 'Consultations',
-                url: `${prefix}/consultations`,
+                title: 'Subjects',
+                url: `${prefix}/subjects`,
+            },
+            {
+                title: 'Chapters',
+                url: `${prefix}/chapters`,
+            },
+        ],
+    },
+    {
+        title: 'Question Bank',
+        items: [
+            {
+                title: 'All Questions',
+                url: `${prefix}/questions`,
+            },
+            {
+                title: 'MCQ Questions',
+                url: `${prefix}/questions/mcq`,
+            },
+            {
+                title: 'CQ Questions',
+                url: `${prefix}/questions/cq`,
+            },
+            {
+                title: 'Short Questions',
+                url: `${prefix}/questions/short`,
+            },
+        ],
+    },
+    {
+        title: 'Examinations',
+        items: [
+            {
+                title: 'Exams',
+                url: `${prefix}/exams`,
+            },
+            {
+                title: 'Results',
+                url: `${prefix}/results`,
+            },
+        ],
+    },
+    {
+        title: 'Students',
+        items: [
+            {
+                title: 'My Students',
+                url: `${prefix}/students`,
             },
         ],
     },
@@ -51,10 +76,6 @@ export const teacherRoutes = [
             {
                 title: 'Profile',
                 url: `${prefix}/profile`,
-            },
-            {
-                title: 'Settings',
-                url: `${prefix}/settings`,
             },
         ],
     },

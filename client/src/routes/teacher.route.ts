@@ -17,10 +17,10 @@ export const teacherRoutes = [
                 title: 'My Courses',
                 url: `${prefix}/courses`,
             },
-            {
-                title: 'Subjects',
-                url: `${prefix}/subjects`,
-            },
+            // {
+            //     title: 'Subjects',
+            //     url: `${prefix}/subjects`,
+            // },
             {
                 title: 'Chapters',
                 url: `${prefix}/chapters`,

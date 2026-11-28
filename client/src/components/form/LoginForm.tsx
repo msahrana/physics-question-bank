@@ -38,15 +38,20 @@ export default function LoginForm() {
     //     password: '$2b$12$SayeD[rAna]@5288',
     // };
 
+    const defaultValues: UserDefaultValues = {
+        email: 'rahim22@gmail.com', //SUPER_ADMIN or ADMIN
+        password: 'Rahim@12345',
+    };
+
     // const defaultValues: UserDefaultValues = {
     //     email: 'shohidulislam.teacher@gmail.com', //TEACHER
     //     password: '$2b$12$ISlamShohidUL2544',
     // };
 
-    const defaultValues: UserDefaultValues = {
-        email: 'rahim@gmail.com', //STUDENT
-        password: 'Rahim@12345',
-    };
+    // const defaultValues: UserDefaultValues = {
+    //     email: 'rahim@gmail.com', //STUDENT
+    //     password: 'Rahim@12345',
+    // };
 
     // const defaultValues: UserDefaultValues = {
     //     email: 'mosttaramony@gmail.com', //STUDENT

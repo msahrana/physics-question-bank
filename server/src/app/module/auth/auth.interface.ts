@@ -57,11 +57,12 @@ export interface IVerifyEmail {
     otp: string;
 }
 
-export interface IRequestUser {
+export interface RequestUser {
     id: string;
-    name: string;
     email: string;
-    role: string;
+    name: string;
+    role: UserRole;
+    image: string | null;
 }
 
 export interface IGoogleLoginPayload {

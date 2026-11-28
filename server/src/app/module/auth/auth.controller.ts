@@ -4,7 +4,6 @@ import { AuthServices } from './auth.service';
 import { sendResponse } from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import config from '../../config';
-import type { IRequestUser } from './auth.interface';
 import { AppError } from '../../utils/AppError';
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
@@ -85,12 +84,32 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// const getMe = catchAsync(async (req: Request, res: Response) => {
+//     const user = req.user as unknown as IRequestUser;
+
+//     if (!user) {
+//         throw new AppError(
+//             httpStatus.BAD_REQUEST,
+//             'User information is missing in the request',
+//         );
+//     }
+
+//     const result = await AuthServices.getMeIntoDB(user);
+
+//     sendResponse(res, {
+//         statusCode: httpStatus.OK,
+//         success: true,
+//         message: 'User Profile Fetched Successfully!',
+//         data: result,
+//     });
+// });
+
 const getMe = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user as unknown as IRequestUser;
+    const user = req.user 
 
     if (!user) {
         throw new AppError(
-            httpStatus.BAD_REQUEST,
+            httpStatus.UNAUTHORIZED,
             'User information is missing in the request',
         );
     }
